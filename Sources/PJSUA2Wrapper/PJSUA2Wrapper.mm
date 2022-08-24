@@ -58,9 +58,24 @@
     pj::AuthCredInfo credInfo;
     credInfo.realm = "*";
     credInfo.username = "stdsip";
-    credInfo.data = "HKg7SgmF0q2p8v02Qd4f6sf0XF9Lof";
+    credInfo.data = "mHH1uXMv8Sk4A2uZ72rsFNwn5F7tra";
     cfg.sipConfig.authCreds.push_back(credInfo);
     cfg.regConfig.registrarUri = "sip:v7oliep.starface-cloud.com;transport=TLS";
+    self.acc->create(cfg, true);
+}
+
+- (void)createAccountOnServer:(NSString *)servername forUser:(NSString *)user withPassword:(PasswordFunction)passwordFunction
+{
+    self.acc = new MyAccount();
+    pj::AccountConfig cfg;
+    cfg.mediaConfig.srtpUse = PJMEDIA_SRTP_OPTIONAL;
+    cfg.idUri = [[NSString stringWithFormat:@"%@<sip:%@@%@>", user, user, servername] cStringUsingEncoding:NSUTF8StringEncoding];
+    pj::AuthCredInfo credInfo;
+    credInfo.realm = "*";
+    credInfo.username = [user cStringUsingEncoding:NSUTF8StringEncoding];
+    credInfo.data = [passwordFunction() cStringUsingEncoding:NSUTF8StringEncoding];
+    cfg.sipConfig.authCreds.push_back(credInfo);
+    cfg.regConfig.registrarUri = [[NSString stringWithFormat:@"sip:%@;transport=TLS", servername] cStringUsingEncoding:NSUTF8StringEncoding];
     self.acc->create(cfg, true);
 }
 

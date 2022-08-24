@@ -17,6 +17,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)createTransportWithType:(pjsip_transport_type_e)type andPort:(int)port;
 
+typedef NSString * _Nonnull(^PasswordFunction)(void);
+
+- (void)createAccountOnServer:(NSString *)servername forUser:(NSString *)user withPassword:(PasswordFunction)passwordFunction;
 - (void)createAccount;
 
 @end

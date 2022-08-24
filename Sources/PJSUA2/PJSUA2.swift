@@ -12,7 +12,9 @@ public struct PJSUA2 {
         wrapper.createTransport(withType: type, andPort: port)
     }
 
-    public func createAccount() {
-        wrapper.createAccount()
+    public func createAccount(onServer server: String, forUser user: String, withPassword password: @escaping () -> String) {
+        wrapper.createAccount(onServer: server, forUser: user) {
+            password()
+        }
     }
 }
