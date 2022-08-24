@@ -8,7 +8,8 @@ let package = Package(
         .iOS(.v15)
     ],
     products: [
-        .library( name: "PJSIP", targets: ["PJSIP"]),
+        .library(name: "PJSUA2", targets: ["PJSUA2"]),
+        .library(name: "PJSUA", targets: ["PJSUA"])
     ],
     targets: [
         .binaryTarget(name: "libpjproject", path: "libpjproject.xcframework"),
@@ -16,12 +17,15 @@ let package = Package(
         .target(name: "PJSUA2Wrapper", dependencies: ["libpjproject","Cpjproject"], cxxSettings: [
             .define("PJ_AUTOCONF")
         ]),
-        .target( name: "PJSIP", dependencies: ["PJSUA2Wrapper"], cxxSettings: [
+        .target( name: "PJSUA2", dependencies: ["PJSUA2Wrapper"], cxxSettings: [
             .define("PJ_AUTOCONF")
         ]),
-        .testTarget( name: "PJSIPTests", dependencies: ["PJSIP"], cxxSettings: [
+        .testTarget( name: "PJSUA2Tests", dependencies: ["PJSUA2"], cxxSettings: [
             .define("PJ_AUTOCONF")
         ]),
+        .target(name: "PJSUA", dependencies: ["Cpjproject"], cxxSettings: [
+            .define("PJ_AUTOCONF")
+        ])
     ],
     cxxLanguageStandard: .cxx17
 )

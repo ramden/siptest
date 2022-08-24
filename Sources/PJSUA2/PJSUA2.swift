@@ -1,7 +1,7 @@
 import Combine
 import PJSUA2Wrapper
 
-public struct PJSIP {
+public struct PJSUA2 {
     private var wrapper = PJSUA2Wrapper(userAgent: "✌️")
 
     public init() {
