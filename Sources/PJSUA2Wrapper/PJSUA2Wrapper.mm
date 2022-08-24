@@ -49,24 +49,10 @@
     pj::Endpoint::instance().transportCreate(type, cfg);
 }
 
-- (void)createAccount
-{
-    self.acc = new MyAccount();
-    pj::AccountConfig cfg;
-    cfg.mediaConfig.srtpUse = PJMEDIA_SRTP_OPTIONAL;
-    cfg.idUri = "stdsip<sip:stdsip@v7oliep.starface-cloud.com>";
-    pj::AuthCredInfo credInfo;
-    credInfo.realm = "*";
-    credInfo.username = "stdsip";
-    credInfo.data = "mHH1uXMv8Sk4A2uZ72rsFNwn5F7tra";
-    cfg.sipConfig.authCreds.push_back(credInfo);
-    cfg.regConfig.registrarUri = "sip:v7oliep.starface-cloud.com;transport=TLS";
-    self.acc->create(cfg, true);
-}
-
 - (void)createAccountOnServer:(NSString *)servername forUser:(NSString *)user withPassword:(PasswordFunction)passwordFunction
 {
-    self.acc = new MyAccount();
+    PJSUA2Wrapper *object(self);
+    self.acc = new MyAccount(object);
     pj::AccountConfig cfg;
     cfg.mediaConfig.srtpUse = PJMEDIA_SRTP_OPTIONAL;
     cfg.idUri = [[NSString stringWithFormat:@"%@<sip:%@@%@>", user, user, servername] cStringUsingEncoding:NSUTF8StringEncoding];
@@ -77,6 +63,18 @@
     cfg.sipConfig.authCreds.push_back(credInfo);
     cfg.regConfig.registrarUri = [[NSString stringWithFormat:@"sip:%@;transport=TLS", servername] cStringUsingEncoding:NSUTF8StringEncoding];
     self.acc->create(cfg, true);
+}
+
+- (void)libStart
+{
+    pj::Endpoint::instance().libStart();
+}
+
+- (void)reportCall:(int)callId
+{
+    if (self.onIncomingCallCallback) {
+        self.onIncomingCallCallback(callId);
+    }
 }
 
 @end

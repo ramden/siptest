@@ -12,15 +12,20 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface PJSUA2Wrapper : NSObject
 
+typedef void(^OnIncomingCall)(int);
+@property OnIncomingCall onIncomingCallCallback;
+
 - (instancetype)init;
 - (instancetype)initWithUserAgent:(NSString* )userAgent NS_DESIGNATED_INITIALIZER;
 
 - (void)createTransportWithType:(pjsip_transport_type_e)type andPort:(int)port;
 
 typedef NSString * _Nonnull(^PasswordFunction)(void);
-
 - (void)createAccountOnServer:(NSString *)servername forUser:(NSString *)user withPassword:(PasswordFunction)passwordFunction;
-- (void)createAccount;
+
+- (void)libStart;
+
+- (void)reportCall:(int)callId;
 
 @end
 

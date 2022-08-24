@@ -3,9 +3,16 @@ import PJSUA2Wrapper
 
 public struct PJSUA2 {
     private var wrapper = PJSUA2Wrapper(userAgent: "✌️")
+    private var callSubject = PassthroughSubject<Int32, Never>()
 
     public init() {
-        
+        setup()
+    }
+
+    private func setup() {
+        wrapper.onIncomingCallCallback = { callId in
+            callSubject.send(callId)
+        }
     }
 
     public func createTransport(withType type: pjsip_transport_type_e = PJSIP_TRANSPORT_TLS, andPort port: Int32 = 5061) {
@@ -16,5 +23,13 @@ public struct PJSUA2 {
         wrapper.createAccount(onServer: server, forUser: user) {
             password()
         }
+    }
+
+    public func libStart() {
+        wrapper.libStart()
+    }
+
+    public func incomingCalls() -> AnyPublisher<Int32, Never> {
+        callSubject.eraseToAnyPublisher()
     }
 }

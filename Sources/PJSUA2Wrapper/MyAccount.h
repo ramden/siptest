@@ -11,7 +11,14 @@
 #include <pjsua2.hpp>
 
 class MyAccount : public pj::Account {
-
+public:
+    MyAccount(const PJSUA2Wrapper *wrapper) : wrapper{wrapper} {}
+    void onIncomingCall(pj::OnIncomingCallParam &prm) override {
+        [wrapper reportCall:prm.callId];
+    }
+private:
+    const PJSUA2Wrapper *wrapper;
 };
 
 #endif /* Header_h */
+
