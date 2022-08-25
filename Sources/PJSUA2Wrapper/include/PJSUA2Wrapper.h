@@ -29,6 +29,8 @@ typedef NSString * _Nonnull(^PasswordFunction)(void);
 - (void)answerCall;
 - (void)hangupCall;
 
+- (void)testAudio;
+
 @end
 
 NS_ASSUME_NONNULL_END
