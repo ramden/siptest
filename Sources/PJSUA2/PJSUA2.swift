@@ -29,6 +29,14 @@ public struct PJSUA2 {
         wrapper.libStart()
     }
 
+    public func answerCall() {
+        wrapper.answerCall()
+    }
+
+    public func hangupCall() {
+        wrapper.hangupCall()
+    }
+
     public func incomingCalls() -> AnyPublisher<Int32, Never> {
         callSubject.eraseToAnyPublisher()
     }

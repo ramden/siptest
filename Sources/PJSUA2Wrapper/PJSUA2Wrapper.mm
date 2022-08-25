@@ -8,10 +8,12 @@
 #include <pjsua2.hpp>
 #import "PJSUA2Wrapper.h"
 #import "MyAccount.h"
+#import "MyCall.h"
 
 @interface PJSUA2Wrapper ()
 
-@property MyAccount *acc;
+@property MyAccount *account;
+@property MyCall *call;
 
 @end
 
@@ -52,7 +54,7 @@
 - (void)createAccountOnServer:(NSString *)servername forUser:(NSString *)user withPassword:(PasswordFunction)passwordFunction
 {
     PJSUA2Wrapper *object(self);
-    self.acc = new MyAccount(object);
+    self.account = new MyAccount(object);
     pj::AccountConfig cfg;
     cfg.mediaConfig.srtpUse = PJMEDIA_SRTP_OPTIONAL;
     cfg.idUri = [[NSString stringWithFormat:@"%@<sip:%@@%@>", user, user, servername] cStringUsingEncoding:NSUTF8StringEncoding];
@@ -62,7 +64,7 @@
     credInfo.data = [passwordFunction() cStringUsingEncoding:NSUTF8StringEncoding];
     cfg.sipConfig.authCreds.push_back(credInfo);
     cfg.regConfig.registrarUri = [[NSString stringWithFormat:@"sip:%@;transport=TLS", servername] cStringUsingEncoding:NSUTF8StringEncoding];
-    self.acc->create(cfg, true);
+    self.account->create(cfg, true);
 }
 
 - (void)libStart
@@ -72,8 +74,29 @@
 
 - (void)reportCall:(int)callId
 {
+    self.call = new MyCall(*self.account, callId);
     if (self.onIncomingCallCallback) {
         self.onIncomingCallCallback(callId);
+    }
+}
+
+- (void)answerCall
+{
+    if (self.call) {
+        pj::CallOpParam prm;
+        prm.statusCode = PJSIP_SC_OK;
+        self.call->answer(prm);
+    }
+}
+
+- (void)hangupCall
+{
+    if (self.call) {
+        pj::CallOpParam prm;
+        prm.statusCode = PJSIP_SC_DECLINE;
+        self.call->hangup(prm);
+        free(self.call);
+        [self reportCall:PJSUA_INVALID_ID];
     }
 }
 
