@@ -13,6 +13,9 @@
 class Account : public pj::Account {
 public:
     Account(const PJSUA2Wrapper *wrapper) : wrapper{wrapper} {}
+    ~Account() {
+        shutdown();
+    }
     void onIncomingCall(pj::OnIncomingCallParam &prm) override {
         if (wrapper) [wrapper onIncomingCall:prm.callId];
     }

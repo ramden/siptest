@@ -14,7 +14,12 @@ class Call : public pj::Call {
 public:
     Call(pj::Account& account, int callId = PJSUA_INVALID_ID) : pj::Call(account, callId) {}
 
-    virtual void onCallState(pj::OnCallStateParam &prm) {};
+    virtual void onCallState(pj::OnCallStateParam &prm) {
+        pj::CallInfo ci = getInfo();
+        NSLog(@"@@@@@ %s", ci.stateText.c_str());
+        NSLog(@"@@@@@ %s", ci.remoteUri.c_str());
+        NSLog(@"@@@@@ %s", ci.remoteContact.c_str());
+    };
 
     virtual void onCallMediaState(pj::OnCallMediaStateParam &prm) {
         printAudioDevices();

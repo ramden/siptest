@@ -41,6 +41,10 @@ public struct PJSUA2 {
         wrapper.testAudio()
     }
 
+    public func call(number: String, onServer server: String) {
+        wrapper.call(number, onServer: server)
+    }
+
     public func incomingCalls() -> AnyPublisher<Int32, Never> {
         callSubject.eraseToAnyPublisher()
     }

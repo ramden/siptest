@@ -13,7 +13,6 @@
 @interface PJSUA2Wrapper ()
 
 @property Account *account;
-//@property Call *call;
 
 @end
 
@@ -59,14 +58,18 @@ std::vector<Call *> calls;
     self.account = new Account(object);
     pj::AccountConfig cfg;
     cfg.mediaConfig.srtpUse = PJMEDIA_SRTP_OPTIONAL;
-    cfg.idUri = [[NSString stringWithFormat:@"%@<sip:%@@%@>", user, user, servername] cStringUsingEncoding:NSUTF8StringEncoding];
+    cfg.idUri = [[NSString stringWithFormat:@"%@<sip:%@@%@>", user, user, servername] UTF8String];
     pj::AuthCredInfo credInfo;
     credInfo.realm = "*";
-    credInfo.username = [user cStringUsingEncoding:NSUTF8StringEncoding];
-    credInfo.data = [passwordFunction() cStringUsingEncoding:NSUTF8StringEncoding];
+    credInfo.username = [user UTF8String];
+    credInfo.data = [passwordFunction() UTF8String];
     cfg.sipConfig.authCreds.push_back(credInfo);
-    cfg.regConfig.registrarUri = [[NSString stringWithFormat:@"sip:%@;transport=TLS", servername] cStringUsingEncoding:NSUTF8StringEncoding];
+    cfg.regConfig.registrarUri = [[NSString stringWithFormat:@"sip:%@;transport=TLS", servername] UTF8String];
+
     self.account->create(cfg, true);
+
+    // FIXME: delete
+    [self dumpAccount];
 }
 
 - (void)libStart
@@ -117,4 +120,20 @@ std::vector<Call *> calls;
     });
 }
 
+- (void)call:(NSString *)number onServer:(NSString *)server
+{
+    auto call = new Call(*self.account);
+    pj::CallOpParam prm{true};
+    try {
+        call->makeCall([[NSString stringWithFormat:@"<sips:%@@%@>", number, server] UTF8String], prm);
+    } catch (pj::Error &error) {
+        NSLog(@"@@@@@ ERROR: %s", error.info().c_str());
+    }
+}
+
+- (void)dumpAccount
+{
+    auto info = self.account->getInfo();
+    NSLog(@"@@@@@ %s", info.uri.c_str());
+}
 @end
