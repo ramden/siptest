@@ -24,7 +24,7 @@ typedef NSString * _Nonnull(^PasswordFunction)(void);
 - (void)createTransportWithType:(pjsip_transport_type_e)type andPort:(int)port;
 - (void)createAccountOnServer:(NSString *)servername forUser:(NSString *)user withPassword:(PasswordFunction)passwordFunction;
 - (void)libStart;
-- (void)reportCall:(int)callId;
+- (void)onIncomingCall:(int)callId;
 
 - (void)answerCall;
 - (void)hangupCall;

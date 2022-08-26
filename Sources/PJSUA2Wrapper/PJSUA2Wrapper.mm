@@ -7,17 +7,19 @@
 
 #include <pjsua2.hpp>
 #import "PJSUA2Wrapper.h"
-#import "MyAccount.h"
-#import "MyCall.h"
+#import "Account.h"
+#import "Call.h"
 
 @interface PJSUA2Wrapper ()
 
-@property MyAccount *account;
-@property MyCall *call;
+@property Account *account;
+//@property Call *call;
 
 @end
 
 @implementation PJSUA2Wrapper
+
+std::vector<Call *> calls;
 
 - (instancetype)initWithUserAgent:(NSString *)userAgent
 {
@@ -54,7 +56,7 @@
 - (void)createAccountOnServer:(NSString *)servername forUser:(NSString *)user withPassword:(PasswordFunction)passwordFunction
 {
     PJSUA2Wrapper *object(self);
-    self.account = new MyAccount(object);
+    self.account = new Account(object);
     pj::AccountConfig cfg;
     cfg.mediaConfig.srtpUse = PJMEDIA_SRTP_OPTIONAL;
     cfg.idUri = [[NSString stringWithFormat:@"%@<sip:%@@%@>", user, user, servername] cStringUsingEncoding:NSUTF8StringEncoding];
@@ -72,9 +74,9 @@
     pj::Endpoint::instance().libStart();
 }
 
-- (void)reportCall:(int)callId
+- (void)onIncomingCall:(int)callId
 {
-    self.call = new MyCall(*self.account, callId);
+    calls.push_back(new Call(*self.account, callId));
     if (self.onIncomingCallCallback) {
         self.onIncomingCallCallback(callId);
     }
@@ -82,21 +84,23 @@
 
 - (void)answerCall
 {
-    if (self.call) {
+    if (auto call = calls.back()) {
         pj::CallOpParam prm;
         prm.statusCode = PJSIP_SC_OK;
-        self.call->answer(prm);
+        call->answer(prm);
     }
 }
 
 - (void)hangupCall
 {
-    if (self.call) {
+    if (auto call = calls.back()) {
         pj::CallOpParam prm;
         prm.statusCode = PJSIP_SC_DECLINE;
-        self.call->hangup(prm);
-        free(self.call);
-        [self reportCall:PJSUA_INVALID_ID];
+        call->hangup(prm);
+        calls.pop_back();
+        if (self.onIncomingCallCallback) {
+            self.onIncomingCallCallback(PJSUA_INVALID_ID);
+        }
     }
 }
 

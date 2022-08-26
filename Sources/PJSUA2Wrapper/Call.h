@@ -1,18 +1,18 @@
 //
-//  MyCall.h
+//  Call.h
 //  
 //
 //  Created by Oliver Epper on 25.08.22.
 //
 
-#ifndef MyCall_h
-#define MyCall_h
+#ifndef Call_h
+#define Call_h
 
 #include <pjsua2.hpp>
 
-class MyCall : public pj::Call {
+class Call : public pj::Call {
 public:
-    MyCall(pj::Account& account, int callId = PJSUA_INVALID_ID) : Call(account, callId) {}
+    Call(pj::Account& account, int callId = PJSUA_INVALID_ID) : pj::Call(account, callId) {}
 
     virtual void onCallState(pj::OnCallStateParam &prm) {};
 
@@ -43,4 +43,4 @@ private:
 };
 
 
-#endif /* MyCall_h */
+#endif /* Call_h */
