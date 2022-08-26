@@ -120,7 +120,7 @@ std::vector<Call *> calls;
     });
 }
 
-- (void)call:(NSString *)number onServer:(NSString *)server
+- (void)callNumber:(NSString *)number onServer:(NSString *)server
 {
     auto call = new Call(*self.account);
     pj::CallOpParam prm{true};

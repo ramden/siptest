@@ -32,7 +32,7 @@ typedef NSString * _Nonnull(^PasswordFunction)(void);
 
 - (void)testAudio;
 
-- (void)call:(NSString *)number onServer:(NSString *)server;
+- (void)callNumber:(NSString *)number onServer:(NSString *)server;
 
 @end
 
