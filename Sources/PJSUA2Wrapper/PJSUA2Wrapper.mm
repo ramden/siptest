@@ -96,7 +96,8 @@ std::vector<Call *> calls;
 
 - (void)hangupCall
 {
-    if (auto call = calls.back()) {
+    if (!calls.empty()) {
+        auto call = calls.back();
         pj::CallOpParam prm;
         prm.statusCode = PJSIP_SC_DECLINE;
         call->hangup(prm);
@@ -104,16 +105,29 @@ std::vector<Call *> calls;
     }
 }
 
-- (void)callNumber:(NSString *)number onServer:(NSString *)server
+// FIXME: Make this throw an Error to Swift so that the client can reset its state to idle
+- (BOOL)callNumber:(NSString *)number onServer:(NSString *)server error:(NSError *__autoreleasing  _Nullable *)error
 {
+    BOOL success = YES;
     auto call = new Call(*self.account);
-    calls.push_back(call);
     pj::CallOpParam prm{true};
     try {
         call->makeCall([[NSString stringWithFormat:@"<sips:%@@%@>", number, server] UTF8String], prm);
-    } catch (pj::Error &error) {
-        NSLog(@"@@@@@ ERROR: %s", error.info().c_str());
+        calls.push_back(call);
+    } catch (pj::Error &pjError) {
+        if (error) {
+            NSString *domain = [[NSString alloc] initWithUTF8String:pjError.title.c_str()];
+            NSString *desc = NSLocalizedString(([[NSString alloc] initWithUTF8String:pjError.info().c_str()]), @"");
+            NSDictionary *userInfo = @{ NSLocalizedDescriptionKey : desc };
+
+            *error = [NSError errorWithDomain:domain
+                                         code:pjError.status
+                                     userInfo:userInfo];
+        }
+        success = NO;
     }
+
+    return success;
 }
 
 - (void)dumpAccount
