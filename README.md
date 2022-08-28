@@ -1,3 +1,7 @@
 # PJSIP
 
-A description of this package.
+```sh
+brew install oliverepper/made/pjproject-apple-platforms
+```
+
+for dependencies
