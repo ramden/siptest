@@ -101,10 +101,25 @@ std::vector<Call *> calls;
         prm.statusCode = PJSIP_SC_DECLINE;
         call->hangup(prm);
         calls.pop_back();
-        if (self.onIncomingCallCallback) {
-            self.onIncomingCallCallback(PJSUA_INVALID_ID);
-        }
     }
+}
+
+- (void)callNumber:(NSString *)number onServer:(NSString *)server
+{
+    auto call = new Call(*self.account);
+    calls.push_back(call);
+    pj::CallOpParam prm{true};
+    try {
+        call->makeCall([[NSString stringWithFormat:@"<sips:%@@%@>", number, server] UTF8String], prm);
+    } catch (pj::Error &error) {
+        NSLog(@"@@@@@ ERROR: %s", error.info().c_str());
+    }
+}
+
+- (void)dumpAccount
+{
+    auto info = self.account->getInfo();
+    NSLog(@"@@@@@ %s", info.uri.c_str());
 }
 
 - (void)testAudio
@@ -120,20 +135,4 @@ std::vector<Call *> calls;
     });
 }
 
-- (void)callNumber:(NSString *)number onServer:(NSString *)server
-{
-    auto call = new Call(*self.account);
-    pj::CallOpParam prm{true};
-    try {
-        call->makeCall([[NSString stringWithFormat:@"<sips:%@@%@>", number, server] UTF8String], prm);
-    } catch (pj::Error &error) {
-        NSLog(@"@@@@@ ERROR: %s", error.info().c_str());
-    }
-}
-
-- (void)dumpAccount
-{
-    auto info = self.account->getInfo();
-    NSLog(@"@@@@@ %s", info.uri.c_str());
-}
 @end
