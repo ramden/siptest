@@ -105,7 +105,6 @@ std::vector<Call *> calls;
     }
 }
 
-// FIXME: Make this throw an Error to Swift so that the client can reset its state to idle
 - (BOOL)callNumber:(NSString *)number onServer:(NSString *)server error:(NSError *__autoreleasing  _Nullable *)error
 {
     BOOL success = YES;
@@ -117,7 +116,7 @@ std::vector<Call *> calls;
     } catch (pj::Error &pjError) {
         if (error) {
             NSString *domain = [[NSString alloc] initWithUTF8String:pjError.title.c_str()];
-            NSString *desc = NSLocalizedString(([[NSString alloc] initWithUTF8String:pjError.info().c_str()]), @"");
+            NSString *desc = NSLocalizedString(([[NSString alloc] initWithUTF8String:pjError.reason.c_str()]), @"");
             NSDictionary *userInfo = @{ NSLocalizedDescriptionKey : desc };
 
             *error = [NSError errorWithDomain:domain
