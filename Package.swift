@@ -13,7 +13,7 @@ let package = Package(
     ],
     targets: [
         .binaryTarget(name: "libpjproject", path: "lib/libpjproject.xcframework"),
-        .systemLibrary(name: "Cpjproject", pkgConfig: "lib/pjproject-apple-platforms-SPM"),
+        .systemLibrary(name: "Cpjproject", pkgConfig: "pjproject-apple-platforms-SPM"),
         .target(name: "PJSUA2Wrapper", dependencies: ["libpjproject","Cpjproject"], cxxSettings: [
             .define("PJ_AUTOCONF")
         ]),
