@@ -1,0 +1,14 @@
+# Package Information for pkg-config
+
+prefix=/Users/denis/Developer/tryout-pjsip/PJSIP-Swift/output/macOS_arm64
+exec_prefix=${prefix}
+libdir=/Users/denis/Developer/tryout-pjsip/PJSIP-Swift/output/macOS_arm64/lib
+includedir=/Users/denis/Developer/tryout-pjsip/PJSIP-Swift/output/macOS_arm64/include
+
+Name: libpjproject
+Description: Multimedia communication library
+URL: http://www.pjsip.org
+Version: 2.12.1
+Libs: -L/Users/denis/Developer/tryout-pjsip/PJSIP-Swift/output/macOS_arm64/lib -lpjsua2-arm-apple-darwin -lstdc++ -lpjsua-arm-apple-darwin -lpjsip-ua-arm-apple-darwin -lpjsip-simple-arm-apple-darwin -lpjsip-arm-apple-darwin -lpjmedia-codec-arm-apple-darwin -lpjmedia-arm-apple-darwin -lpjmedia-videodev-arm-apple-darwin -lpjmedia-audiodev-arm-apple-darwin -lpjmedia-arm-apple-darwin -lpjnath-arm-apple-darwin -lpjlib-util-arm-apple-darwin -lpj-arm-apple-darwin
+Libs.private:  -lsrtp-arm-apple-darwin -lresample-arm-apple-darwin -lgsmcodec-arm-apple-darwin -lspeex-arm-apple-darwin -lilbccodec-arm-apple-darwin -lg7221codec-arm-apple-darwin -lyuv-arm-apple-darwin -lwebrtc-arm-apple-darwin  -lm -lpthread  -framework CoreAudio -framework CoreServices -framework AudioUnit -framework AudioToolbox -framework Foundation -framework AppKit -framework AVFoundation -framework CoreGraphics -framework QuartzCore -framework CoreVideo -framework CoreMedia -framework VideoToolbox
+Cflags: -I/Users/denis/Developer/tryout-pjsip/PJSIP-Swift/output/macOS_arm64/include -DPJ_AUTOCONF=1  -DPJ_IS_BIG_ENDIAN=0 -DPJ_IS_LITTLE_ENDIAN=1
