@@ -5,7 +5,7 @@ set -e
 
 if [ $# -eq 0 ]
 then
-    echo "sh ./start.sh <absolute path>"
+    echo "sh ./start.sh <absolute path to parent>/output ."
     exit 1
 fi
 
@@ -282,3 +282,7 @@ Description: Multimedia communication library
 Libs: -framework Network -framework Security -framework AudioToolbox -framework AVFoundation -framework CoreAudio -framework Foundation -lpjproject
 Cflags: -I${prefix}/lib/libpjproject.xcframework/Headers
 END
+
+cp -rv output/lib/libpjproject.xcframework .
+rm -rf output
+rm -rf pjproject

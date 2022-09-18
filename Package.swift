@@ -8,12 +8,13 @@ let package = Package(
         .iOS(.v15)
     ],
     products: [
-        .library(name: "PJSUA2", targets: ["PJSUA2"]),
+       // .library(name: "PJSUA2", targets: ["PJSUA2"]),
         .library(name: "PJSUA", targets: ["PJSUA"])
     ],
     targets: [
-        .binaryTarget(name: "libpjproject", path: "lib/libpjproject.xcframework"),
+        .binaryTarget(name: "libpjproject", path: "libpjproject.xcframework"),
         .systemLibrary(name: "Cpjproject", pkgConfig: "pjproject-apple-platforms-SPM"),
+        /*
         .target(name: "PJSUA2Wrapper", dependencies: ["libpjproject","Cpjproject"], cxxSettings: [
             .define("PJ_AUTOCONF")
         ]),
@@ -23,6 +24,7 @@ let package = Package(
         .testTarget( name: "PJSUA2Tests", dependencies: ["PJSUA2"], cxxSettings: [
             .define("PJ_AUTOCONF")
         ]),
+        */
         .target(name: "PJSUA", dependencies: ["Cpjproject"], cxxSettings: [
             .define("PJ_AUTOCONF")
         ])
