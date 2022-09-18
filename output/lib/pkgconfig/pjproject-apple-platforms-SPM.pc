@@ -1,7 +1,0 @@
-prefix=/Users/denis/Developer/tryout-pjsip/PJSIP-Swift/output
-
-Name: Cpjproject
-Version: 2.12.1
-Description: Multimedia communication library
-Libs: -framework Network -framework Security -framework AudioToolbox -framework AVFoundation -framework CoreAudio -framework Foundation -lpjproject
-Cflags: -I${prefix}/lib/libpjproject.xcframework/Headers
