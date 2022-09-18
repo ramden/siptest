@@ -8,14 +8,16 @@ let package = Package(
         .iOS(.v15)
     ],
     products: [
-       // .library(name: "PJSUA2", targets: ["PJSUA2"]),
-        .library(name: "PJSUA", targets: ["PJSUA"])
+        //.library(name: "PJSUA3", targets: ["PJSUA3"]),
+        //.library(name: "PJSUA2", targets: ["PJSUA2"]),
+        .library(name: "PJSUA", targets: ["PJSUA", "libpjproject"])
+        //.library(name: "libpjproject", targets: ["libpjproject"]),
+        //.library(name: "Cpjproject", targets: ["Cpjproject"])
     ],
     targets: [
         .binaryTarget(name: "libpjproject", path: "libpjproject.xcframework"),
         .systemLibrary(name: "Cpjproject", pkgConfig: "pjproject-apple-platforms-SPM"),
-        /*
-        .target(name: "PJSUA2Wrapper", dependencies: ["libpjproject","Cpjproject"], cxxSettings: [
+        /*.target(name: "PJSUA2Wrapper", dependencies: ["libpjproject","Cpjproject"], cxxSettings: [
             .define("PJ_AUTOCONF")
         ]),
         .target( name: "PJSUA2", dependencies: ["PJSUA2Wrapper"], cxxSettings: [
@@ -25,9 +27,10 @@ let package = Package(
             .define("PJ_AUTOCONF")
         ]),
         */
-        .target(name: "PJSUA", dependencies: ["Cpjproject"], cxxSettings: [
+        .target(name: "PJSUA", dependencies: ["Cpjproject", "libpjproject"], cxxSettings: [
             .define("PJ_AUTOCONF")
-        ])
+        ]),
+        
     ],
     cxxLanguageStandard: .cxx17
 )
