@@ -10,8 +10,8 @@ let package = Package(
     products: [
         //.library(name: "PJSUA3", targets: ["PJSUA3"]),
         //.library(name: "PJSUA2", targets: ["PJSUA2"]),
-        .library(name: "PJSUA", targets: ["PJSUA", "libpjproject"])
-        //.library(name: "libpjproject", targets: ["libpjproject"]),
+        //.library(name: "PJSUA", targets: ["PJSUA", "libpjproject"])
+        .library(name: "libpjproject", targets: ["libpjproject"]),
         //.library(name: "Cpjproject", targets: ["Cpjproject"])
     ],
     targets: [
